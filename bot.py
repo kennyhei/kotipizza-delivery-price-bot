@@ -1,35 +1,54 @@
 import asyncio
+import settings
 
 from aiogram import Bot
 from aiogram import Dispatcher
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.dispatcher.filters.state import State
+from aiogram.dispatcher.filters.state import StatesGroup
 from aiogram.utils import executor
 from aiogram.types.message import ParseMode
 
-from config import settings
 from scraper import fetch_delivery_price
 
 
 # Initialize bot and dispatcher
 bot = Bot(settings.TOKEN)
-dp = Dispatcher(bot)
+storage = MemoryStorage()
+dp = Dispatcher(bot, storage=storage)
 
 
-def _get_config(message):
-    return settings.get_config(message['from']['id'])
+def _is_float(value):
+    value = value.replace(',', '.')
+    try:
+        float(value)
+        return True
+    except Exception:
+        return False
 
 
-async def _poll_price(message, conf):
-    address = conf.DELIVERY_ADDRESS
-    max_price = conf.DELIVERY_MAX_PRICE
+# States
+class Form(StatesGroup):
+    address = State()
+    max_price = State()
+
+
+async def _poll_price(message, data):
+    address = data['address']
+    max_price = data['max_price']
+    state = None
     for _ in range(1000):
         result = await asyncio.gather(fetch_delivery_price(address))
-        if not conf.POLL_PRICE:
+        state = dp.current_state()
+        data = await state.get_data()
+        if not data['poll_price']:
             break
         price = result[0]
         if not price:
             await message.answer(
                 f'Could not find delivery price with given address *{address}*. '
-                'Stopped fetching.'
+                f'Stopped fetching.',
+                parse_mode=ParseMode.MARKDOWN
             )
             break
         price_str = format(price, '.2f')
@@ -39,52 +58,58 @@ async def _poll_price(message, conf):
                 f'Time to order! 🍕 https://kotipizza.fi'
             )
             break
-        conf.DELIVERY_LATEST_PRICE = price_str
-        await asyncio.sleep(conf.POLL_INTERVAL)
-    settings.remove_config(conf)
-
-
-async def _handle_address(message, conf):
-    address = message.text
-    if not address:
-        await message.answer('You did not give an address. Try again.')
-        return
-    conf.DELIVERY_ADDRESS = address
-    await message.answer('OK. Next set the maximum allowed price for the delivery (e.g. "5.1" or "5,1").')
-
-
-async def _handle_max_price(message, conf):
-    try:
-        text = message.text.replace(',', '.').strip()
-        max_price = float(text)
-        address = conf.DELIVERY_ADDRESS
-        conf.DELIVERY_MAX_PRICE = max_price
-        asyncio.create_task(_poll_price(message, conf))
-        await message.answer(
-            f'Alright! I\'ll notify you when the delivery price is below {max_price} € '
-            f'for address *{address}*.',
-            parse_mode=ParseMode.MARKDOWN
-        )
-    except Exception:
-        await message.answer('Could not parse max price from answer. Try again.')
+        await state.update_data(latest_price=price_str)
+        await asyncio.sleep(60 * 10)
+    await state.reset_state()
 
 
 @dp.message_handler(commands=['start'])
 async def cmd_start(message):
-    conf = _get_config(message)
-    conf.POLL_PRICE = True
-    address = ' '.join(message.text.split()[1:])
-    conf.DELIVERY_ADDRESS = address
-    if address:
-        await message.answer('OK. Next set the maximum limit for the price of delivery (e.g. "5.1" or "5,1").')
-    else:
-        await message.answer('Please give a delivery address.')
+    await Form.address.set()
+    await message.reply('Hi there! What\'s the delivery address?')
+
+
+@dp.message_handler(state=Form.address)
+async def process_address(message, state):
+    """
+    Process delivery name
+    """
+    async with state.proxy() as data:
+        data['address'] = message.text
+
+    await Form.next()
+    await message.reply('OK! What\'s the maximum limit for the price of delivery? (e.g. "5.1" or "5,1")')
+
+
+@dp.message_handler(lambda message: not _is_float(message.text), state=Form.max_price)
+async def process_max_price_invalid(message):
+    return await message.reply('Price has to be a number. Try again.')
+
+
+@dp.message_handler(lambda message: _is_float(message.text), state=Form.max_price)
+async def process_max_price(message, state):
+    # Update state and data
+    await Form.next()
+    await state.update_data(
+        max_price=float(message.text.replace(',', '.')),
+        poll_interval=60 * 10,  # seconds
+        poll_price=True,
+        latest_price=None
+    )
+
+    async with state.proxy() as data:
+        asyncio.create_task(_poll_price(message, data))
+        await message.answer(
+            f'Alright! I\'ll notify you when the delivery price is below {data["max_price"]} € '
+            f'for address *{data["address"]}*.',
+            parse_mode=ParseMode.MARKDOWN
+        )
 
 
 @dp.message_handler(commands=['showlatestprice'])
 async def cmd_latest_price(message):
-    conf = _get_config(message)
-    price = conf.DELIVERY_LATEST_PRICE
+    data = await dp.current_state().get_data()
+    price = data['latest_price']
     if not price:
         await message.answer('I haven\'t fetched latest price yet. Try again later.')
     else:
@@ -93,7 +118,7 @@ async def cmd_latest_price(message):
 
 @dp.message_handler(commands=['stop'])
 async def cmd_stop(message):
-    settings.remove_config(message['from']['id'])
+    await dp.current_state().update_data(poll_price=False)
     await message.answer('Stopped fetching.')
 
 
@@ -104,15 +129,6 @@ async def cmd_help(message):
         f'/stop - Stops fetching delivery price\n'
         f'/showlatestprice - Shows latest delivery price'
     )
-
-
-@dp.message_handler()
-async def echo(message):
-    conf = _get_config(message)
-    if not conf.DELIVERY_ADDRESS:
-        await _handle_address(message, conf)
-    elif conf.DELIVERY_MAX_PRICE < 0:
-        await _handle_max_price(message, conf)
 
 
 async def on_startup(dp):
