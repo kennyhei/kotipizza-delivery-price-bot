@@ -1,3 +1,9 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 class UserConfig:
 
     POLL_PRICE = False
@@ -9,7 +15,20 @@ class UserConfig:
 
 class Settings:
 
+    # User configs
     configs = {}
+
+    # Webhook settings
+    WEBHOOK_HOST = 'localhost'
+    WEBHOOK_PATH = '/webhook'
+    WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
+
+    # Webserver settings
+    WEBAPP_HOST = 'localhost'  # or ip
+    WEBAPP_PORT = 5000
+
+    # Token
+    TOKEN = os.getenv('TOKEN')
 
     def get_config(self, user_id):
         if not self.configs.get(user_id):
