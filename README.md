@@ -28,7 +28,7 @@ You can check that the Webhook API works by sending `update` request as JSON to 
 
 Example request:
 
-```
+```javascript
 POST http://localhost:5000/webhook
 Content-Type: application/json
 
@@ -53,7 +53,7 @@ Content-Type: application/json
 
 Aiogram should return HTTP 200 with JSON body that has the bot's answer in it:
 
-```
+```javascript
 HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
 Content-Length: 240
