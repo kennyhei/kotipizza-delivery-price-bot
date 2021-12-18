@@ -9,6 +9,7 @@ from aiogram.dispatcher.filters.state import State
 from aiogram.dispatcher.filters.state import StatesGroup
 from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils import executor
+from aiogram.utils.markdown import escape_md
 from aiogram.types.message import ParseMode
 
 from scraper import fetch_delivery_price
@@ -16,7 +17,7 @@ from scraper import fetch_delivery_price
 logging.basicConfig(level=logging.INFO)
 
 # Initialize bot and dispatcher
-bot = Bot(settings.TOKEN, parse_mode=ParseMode.MARKDOWN)
+bot = Bot(settings.TOKEN, parse_mode=ParseMode.MARKDOWN_V2)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 
@@ -30,17 +31,25 @@ class Form(StatesGroup):
 class Message:
 
     @staticmethod
-    async def answer(message, value):
+    async def answer(message, value, escape_text=True, use_bot=False):
+        if escape_text:
+            value = escape_md(value)
         if settings.MODE == 'polling':
-            await message.answer(value)
+            return await message.answer(value)
         if settings.MODE == 'webhook':
+            if use_bot:
+                return await bot.send_message(message.chat.id, value)
             return SendMessage(message.chat.id, value)
 
     @staticmethod
-    async def reply(message, value):
+    async def reply(message, value, escape_text=True, use_bot=False):
+        if escape_text:
+            value = escape_md(value)
         if settings.MODE == 'polling':
-            await message.reply(value)
+            return await message.reply(value)
         if settings.MODE == 'webhook':
+            if use_bot:
+                return await bot.send_message(message.chat.id, value, reply_to_message_id=message.id)
             return SendMessage(message.chat.id, value, reply_to_message_id=message.id)
 
 
@@ -69,7 +78,8 @@ async def _poll_price(message, data):
             await Message.answer(
                 message,
                 f'Could not find delivery price with given address *{address}*. '
-                f'Stopped fetching.'
+                f'Stopped fetching.',
+                escape_text=False, use_bot=True
             )
             break
         price_str = format(price, '.2f')
@@ -77,7 +87,8 @@ async def _poll_price(message, data):
             await Message.answer(
                 message,
                 f'Current delivery price is {price_str} €. '
-                f'Time to order! 🍕 https://kotipizza.fi'
+                f'Time to order! 🍕 https://kotipizza.fi',
+                use_bot=True
             )
             break
         await state.update_data(latest_price=price_str)
@@ -88,19 +99,22 @@ async def _poll_price(message, data):
 @dp.message_handler(commands=['start'])
 async def cmd_start(message):
     await Form.address.set()
-    await Message.reply(message, 'Hi there! What\'s the delivery address?')
+    return await Message.reply(message, 'Hi there! What\'s the delivery address?')
 
 
 @dp.message_handler(state=Form.address)
 async def process_address(message, state):
     await state.update_data(address=message.text)
     await Form.next()
-    await Message.reply(message, 'OK! What\'s the maximum limit for the price of delivery? (e.g. "5.1" or "5,1")')
+    return await Message.reply(
+        message,
+        'OK! What\'s the maximum limit for the price of delivery? (e.g. "5.1" or "5,1")'
+    )
 
 
 @dp.message_handler(lambda message: not _is_float(message.text), state=Form.max_price)
 async def process_max_price_invalid(message):
-    await Message.reply(message, 'Price has to be a number. Try again.')
+    return await Message.reply(message, 'Price has to be a number. Try again.')
 
 
 @dp.message_handler(lambda message: _is_float(message.text), state=Form.max_price)
@@ -114,32 +128,34 @@ async def process_max_price(message, state):
     await Form.next()
     async with state.proxy() as data:
         asyncio.create_task(_poll_price(message, data))
-        await Message.answer(
+        price_str = str(data['max_price']).replace('.', '\\.')
+        return await Message.answer(
             message,
-            f'Alright! I\'ll notify you when the delivery price is below {data["max_price"]} € '
-            f'for address *{data["address"]}*.'
+            f'Alright\\! I\'ll notify you when the delivery price is below {price_str} € '
+            f'for address *{data["address"]}*\\.',
+            escape_text=False
         )
 
 
 @dp.message_handler(commands=['showlatestprice'])
 async def cmd_latest_price(message):
     data = await dp.current_state().get_data()
-    price = data['latest_price']
+    price = data.get('latest_price')
     if not price:
-        await Message.answer(message, 'I haven\'t fetched latest price yet. Try again later.')
+        return await Message.answer(message, 'I haven\'t fetched latest price yet. Try again later.')
     else:
-        await Message.answer(message, f'Latest delivery price: {price} €')
+        return await Message.answer(message, f'Latest delivery price: {price} €')
 
 
 @dp.message_handler(commands=['stop'])
 async def cmd_stop(message):
     await dp.current_state().update_data(poll_price=False)
-    await Message.answer(message, 'Stopped fetching.')
+    return await Message.answer(message, 'Stopped fetching.')
 
 
 @dp.message_handler(commands=['help'])
 async def cmd_help(message):
-    await Message.answer(
+    return await Message.answer(
         message,
         f'/start - Fetches every 10 minutes the current delivery price\n'
         f'/stop - Stops fetching delivery price\n'
