@@ -3,4 +3,5 @@ venv/
 media/
 .env
 geckodriver.log
+post_webhook.rest
 __pycache__/
