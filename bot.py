@@ -135,8 +135,8 @@ async def echo(message):
 
 
 async def on_startup(dp):
-    pass
-    # await bot.set_webhook(settings.WEBHOOK_URL)
+    if settings.ENV == 'production':
+        await bot.set_webhook(settings.WEBHOOK_URL)
 
 
 async def on_shutdown(dp):

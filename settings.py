@@ -3,12 +3,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Environment (development / production)
+ENV = os.getenv('ENV', 'development')
+
 # Webserver settings
-WEBAPP_HOST = 'localhost'  # or ip
-WEBAPP_PORT = 5000
+WEBAPP_HOST = os.getenv('WEBAPP_HOST', 'localhost')
+WEBAPP_PORT = int(os.getenv('WEBAPP_PORT', 5000))
 
 # Webhook settings
-WEBHOOK_PATH = '/webhook'
+WEBHOOK_PATH = os.getenv('WEBHOOK_PATH', '/webhook')
 WEBHOOK_URL = f'{WEBAPP_HOST}{WEBHOOK_PATH}'
 
 # Token
