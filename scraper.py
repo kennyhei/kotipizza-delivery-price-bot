@@ -1,8 +1,8 @@
+import asyncio
 from splinter import Browser
-from time import sleep
 
 
-def _fill_delivery_address(browser, address):
+async def _fill_delivery_address(browser, address):
     """
     Phase 1:
     Fills user's delivery address in
@@ -15,11 +15,11 @@ def _fill_delivery_address(browser, address):
     input_location_address = input_location_address.first
     input_location_address.fill(address)
     # Wait for Google Maps autocomplete form to appear
-    sleep(5)
+    await asyncio.sleep(5)
     return True
 
 
-def _click_outside_delivery_address_input(browser):
+async def _click_outside_delivery_address_input(browser):
     """
     Phase 2:
     Clicks any element except the input we just filled,
@@ -29,7 +29,7 @@ def _click_outside_delivery_address_input(browser):
     el = browser.find_by_css('.primary').first  # some random element in the page
     el.click()
     # Wait for the page to search and display closest restaurants
-    sleep(5)
+    await asyncio.sleep(5)
 
 
 def _parse_delivery_price(browser):
@@ -54,11 +54,11 @@ async def fetch_delivery_price(address):
     browser.visit(url)
     # Wait that page is fully loaded as it's mostly
     # dynamically created using Javascript
-    sleep(5)
-    is_filled = _fill_delivery_address(browser, address)
+    await asyncio.sleep(5)
+    is_filled = await _fill_delivery_address(browser, address)
     if not is_filled:
         browser.quit()
-    _click_outside_delivery_address_input(browser)
+    await _click_outside_delivery_address_input(browser)
     price = _parse_delivery_price(browser)
     browser.quit()
     return price

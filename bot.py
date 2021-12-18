@@ -37,7 +37,8 @@ async def _poll_price(message, data):
     address = data['address']
     max_price = data['max_price']
     state = None
-    for _ in range(1000):
+    # Poll two hours at max
+    for _ in range(20):
         result = await asyncio.gather(fetch_delivery_price(address))
         state = dp.current_state()
         data = await state.get_data()
