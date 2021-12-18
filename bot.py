@@ -7,12 +7,12 @@ from aiogram import Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import State
 from aiogram.dispatcher.filters.state import StatesGroup
-from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils import executor
-from aiogram.utils.markdown import escape_md
 from aiogram.types.message import ParseMode
 
 from scraper import fetch_delivery_price
+from utils import Message
+from utils import is_float
 
 logging.basicConfig(level=logging.INFO)
 
@@ -26,40 +26,6 @@ dp = Dispatcher(bot, storage=storage)
 class Form(StatesGroup):
     address = State()
     max_price = State()
-
-
-class Message:
-
-    @staticmethod
-    async def answer(message, value, escape_text=True, use_bot=False):
-        if escape_text:
-            value = escape_md(value)
-        if settings.MODE == 'polling':
-            return await message.answer(value)
-        if settings.MODE == 'webhook':
-            if use_bot:
-                return await bot.send_message(message.chat.id, value)
-            return SendMessage(message.chat.id, value)
-
-    @staticmethod
-    async def reply(message, value, escape_text=True, use_bot=False):
-        if escape_text:
-            value = escape_md(value)
-        if settings.MODE == 'polling':
-            return await message.reply(value)
-        if settings.MODE == 'webhook':
-            if use_bot:
-                return await bot.send_message(message.chat.id, value, reply_to_message_id=message.id)
-            return SendMessage(message.chat.id, value, reply_to_message_id=message.id)
-
-
-def _is_float(value):
-    value = value.replace(',', '.')
-    try:
-        float(value)
-        return True
-    except Exception:
-        return False
 
 
 async def _poll_price(message, data):
@@ -79,7 +45,7 @@ async def _poll_price(message, data):
                 message,
                 f'Could not find delivery price with given address *{address}*. '
                 f'Stopped fetching.',
-                escape_text=False, use_bot=True
+                escape_text=False, bot=bot
             )
             break
         price_str = format(price, '.2f')
@@ -88,7 +54,7 @@ async def _poll_price(message, data):
                 message,
                 f'Current delivery price is {price_str} €. '
                 f'Time to order! 🍕 https://kotipizza.fi',
-                use_bot=True
+                bot=bot
             )
             break
         await state.update_data(latest_price=price_str)
@@ -112,12 +78,12 @@ async def process_address(message, state):
     )
 
 
-@dp.message_handler(lambda message: not _is_float(message.text), state=Form.max_price)
+@dp.message_handler(lambda message: not is_float(message.text), state=Form.max_price)
 async def process_max_price_invalid(message):
     return await Message.reply(message, 'Price has to be a number. Try again.')
 
 
-@dp.message_handler(lambda message: _is_float(message.text), state=Form.max_price)
+@dp.message_handler(lambda message: is_float(message.text), state=Form.max_price)
 async def process_max_price(message, state):
     await state.update_data(
         max_price=float(message.text.replace(',', '.')),
