@@ -18,6 +18,12 @@ storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 
 
+# States for "start" command
+class Form(StatesGroup):
+    address = State()
+    max_price = State()
+
+
 def _is_float(value):
     value = value.replace(',', '.')
     try:
@@ -25,12 +31,6 @@ def _is_float(value):
         return True
     except Exception:
         return False
-
-
-# States
-class Form(StatesGroup):
-    address = State()
-    max_price = State()
 
 
 async def _poll_price(message, data):
@@ -72,12 +72,7 @@ async def cmd_start(message):
 
 @dp.message_handler(state=Form.address)
 async def process_address(message, state):
-    """
-    Process delivery name
-    """
-    async with state.proxy() as data:
-        data['address'] = message.text
-
+    await state.update_data(address=message.text)
     await Form.next()
     await message.reply('OK! What\'s the maximum limit for the price of delivery? (e.g. "5.1" or "5,1")')
 
@@ -89,15 +84,13 @@ async def process_max_price_invalid(message):
 
 @dp.message_handler(lambda message: _is_float(message.text), state=Form.max_price)
 async def process_max_price(message, state):
-    # Update state and data
-    await Form.next()
     await state.update_data(
         max_price=float(message.text.replace(',', '.')),
         poll_interval=60 * 10,  # seconds
         poll_price=True,
         latest_price=None
     )
-
+    await Form.next()
     async with state.proxy() as data:
         asyncio.create_task(_poll_price(message, data))
         await message.answer(
