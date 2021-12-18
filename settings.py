@@ -17,5 +17,5 @@ WEBHOOK_URL = f'{WEBAPP_HOST}{WEBHOOK_PATH}'
 # Token
 TOKEN = os.getenv('TOKEN')
 
-# Bot mode ("polling" or "webhook")
+# Bot mode (polling / webhook)
 MODE = os.getenv('MODE', 'polling')
