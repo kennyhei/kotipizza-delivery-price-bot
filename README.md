@@ -51,4 +51,17 @@ Content-Type: application/json
 }
 ```
 
-Aiogram should return response 200 with JSON that has the bot's answer in it.
+Aiogram should return HTTP 200 with JSON body that has the bot's answer in it:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 240
+
+{
+  "method": "sendMessage",
+  "chat_id": 1111111,
+  "text": "/start \\- Fetches every 10 minutes the current delivery price\n/stop \\- Stops fetching delivery price\n/showlatestprice \\- Shows latest delivery price",
+  "parse_mode": "markdownv2"
+}
+```
