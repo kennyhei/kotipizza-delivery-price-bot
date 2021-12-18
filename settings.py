@@ -20,3 +20,6 @@ TOKEN = os.getenv('TOKEN')
 
 # Bot mode (polling / webhook)
 MODE = os.getenv('MODE', 'polling')
+
+# Bot language
+LANGUAGE = os.getenv('LANGUAGE', 'fi')

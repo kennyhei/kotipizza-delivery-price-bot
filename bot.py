@@ -1,4 +1,5 @@
 import asyncio
+import i18n
 import logging
 import settings
 
@@ -42,18 +43,18 @@ async def _poll_price(message, data):
         price = result[0]
         if not price:
             await Message.answer(
-                message,
-                f'Could not find delivery price with given address *{address}*. '
-                f'Stopped fetching.',
+                message, i18n['poll_failure'].format(
+                    address=address
+                ),
                 escape_text=False, bot=bot
             )
             break
         price_str = format(price, '.2f')
         if price < max_price:
             await Message.answer(
-                message,
-                f'Current delivery price is {price_str} €. '
-                f'Time to order! 🍕 https://kotipizza.fi',
+                message, i18n['poll_success'].format(
+                    price_str=price_str
+                ),
                 bot=bot
             )
             break
@@ -65,22 +66,19 @@ async def _poll_price(message, data):
 @dp.message_handler(commands=['start'])
 async def cmd_start(message):
     await Form.address.set()
-    return await Message.reply(message, 'Hi there! What\'s the delivery address?')
+    return await Message.reply(message, i18n['start'])
 
 
 @dp.message_handler(state=Form.address)
 async def process_address(message, state):
     await state.update_data(address=message.text)
     await Form.next()
-    return await Message.reply(
-        message,
-        'OK! What\'s the maximum limit for the price of delivery? (e.g. "5.1" or "5,1")'
-    )
+    return await Message.reply(message, i18n['process_address'])
 
 
 @dp.message_handler(lambda message: not is_float(message.text), state=Form.max_price)
 async def process_max_price_invalid(message):
-    return await Message.reply(message, 'Price has to be a number. Try again.')
+    return await Message.reply(message, i18n['process_max_price_invalid'])
 
 
 @dp.message_handler(lambda message: is_float(message.text), state=Form.max_price)
@@ -96,9 +94,10 @@ async def process_max_price(message, state):
         asyncio.create_task(_poll_price(message, data))
         price_str = str(data['max_price']).replace('.', '\\.')
         return await Message.answer(
-            message,
-            f'Alright\\! I\'ll notify you when the delivery price is below {price_str} € '
-            f'for address *{data["address"]}*\\.',
+            message, i18n['process_max_price'].format(
+                price_str=price_str,
+                address=data['address']
+            ),
             escape_text=False
         )
 
@@ -108,25 +107,20 @@ async def cmd_latest_price(message):
     data = await dp.current_state().get_data()
     price = data.get('latest_price')
     if not price:
-        return await Message.answer(message, 'I haven\'t fetched latest price yet. Try again later.')
+        return await Message.answer(message, i18n['latest_price_invalid'])
     else:
-        return await Message.answer(message, f'Latest delivery price: {price} €')
+        return await Message.answer(message, i18n['latest_price'].format(price=price))
 
 
 @dp.message_handler(commands=['stop'])
 async def cmd_stop(message):
     await dp.current_state().update_data(poll_price=False)
-    return await Message.answer(message, 'Stopped fetching.')
+    return await Message.answer(message, i18n['stop'])
 
 
 @dp.message_handler(commands=['help'])
 async def cmd_help(message):
-    return await Message.answer(
-        message,
-        f'/start - Fetches every 10 minutes the current delivery price\n'
-        f'/stop - Stops fetching delivery price\n'
-        f'/showlatestprice - Shows latest delivery price'
-    )
+    return await Message.answer(message, i18n['help'])
 
 
 @dp.message_handler()
