@@ -157,3 +157,6 @@ def main():
         )
     if settings.MODE == 'polling':
         executor.start_polling(dp, skip_updates=True)
+
+
+main()
