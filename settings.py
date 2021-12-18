@@ -8,7 +8,7 @@ ENV = os.getenv('ENV', 'development')
 
 # Webserver settings
 WEBAPP_HOST = os.getenv('WEBAPP_HOST', 'localhost')
-WEBAPP_PORT = int(os.getenv('WEBAPP_PORT', 5000))
+WEBAPP_PORT = int(os.getenv('PORT'), os.getenv('WEBAPP_PORT', 5000))
 
 # Webhook settings
 WEBHOOK_HOST = os.getenv('WEBHOOK_HOST', WEBAPP_HOST)
