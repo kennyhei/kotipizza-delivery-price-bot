@@ -144,7 +144,7 @@ async def on_shutdown(dp):
     await bot.delete_webhook()
 
 
-def run():
+def main():
     if settings.MODE == 'webhook':
         executor.start_webhook(
             dispatcher=dp,
@@ -157,6 +157,3 @@ def run():
         )
     if settings.MODE == 'polling':
         executor.start_polling(dp, skip_updates=True)
-
-
-run()
