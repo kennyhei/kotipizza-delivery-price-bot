@@ -33,12 +33,14 @@ async def _get_price(message, address):
 
 # @dp.message_handler(commands=['poll'])
 async def cmd_price(message):
-    data = await TelegramBot.dp.current_state().get_data()
     await PriceForm.address.set()
+    '''
+    data = await TelegramBot.dp.current_state().get_data()
     if data.get('address'):
         message.text = data['address']
         state = TelegramBot.dp.current_state()
         return await process_address(message, state)
+    '''
     return await Message.reply(message, i18n['notify'])
 
 
