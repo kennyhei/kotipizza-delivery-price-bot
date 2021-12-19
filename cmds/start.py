@@ -36,17 +36,20 @@ async def _poll_price(message, data):
                 escape_text=False, bot=TelegramBot.bot
             )
             break
-        # TODO: Multiple restaurants info, new text when
-        # some restaurant's delivery fee is below limit
-        price = results[0]['deliveryFee']
-        price_str = format(price, '.2f')
-        if price < max_price:
-            await Message.answer(
-                message, i18n['poll_success'].format(
-                    price_str=price_str
-                ),
-                bot=TelegramBot.bot
-            )
+        for restaurant in results:
+            if (
+                restaurant['openForDeliveryStatus'] != 'CLOSED' and
+                restaurant['deliveryFee'] < max_price
+            ):
+                price = restaurant['deliveryFee']
+                price_str = format(price, '.2f')
+                await Message.answer(
+                    message, i18n['poll_success'].format(
+                        price_str=price_str,
+                        estimate=restaurant['currentDeliveryEstimate']
+                    ),
+                    bot=TelegramBot.bot
+                )
             break
         await state.update_data(latest_price=price_str)
         await asyncio.sleep(60 * 10)

@@ -72,5 +72,4 @@ Content-Length: 240
     - `/setprice` - User can set maximum price for the delivery
     - `/config` - Show set address and max price
     - NOTE: These are helpful only if user info is not cleared from memory after (any) command has been executed
-- Show prices of all nearby restaurants
 - Don't ask address again in `/start`, `/poll` etc. if it's found in the memory

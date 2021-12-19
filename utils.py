@@ -42,7 +42,14 @@ def build_restaurants_str(restaurants):
     for idx, restaurant in enumerate(restaurants):
         name = restaurant['displayName']
         price = format_price(restaurant['deliveryFee'])
-        text += f'\n{idx + 1}. {name} - Kotiinkuljetus {price} €'
+        estimate = restaurant['currentDeliveryEstimate']
+        is_closed = restaurant['openForDeliveryStatus'] == 'CLOSED'
+        text += f'\n{idx + 1}. {name}'
+        if is_closed:
+            text += f'\n    - SULJETTU'
+        else:
+            text += f'({estimate} min.)'
+            text += f'\n    - Kotiinkuljetus {price} €'
     return text
 
 
@@ -69,6 +76,8 @@ def get_coordinates(address):
 
 
 async def get_nearby_restaurants(coordinates):
+    if not coordinates:
+        return None
     session = TelegramBot.session
     if session is None:
         session = aiohttp.ClientSession(raise_for_status=True)

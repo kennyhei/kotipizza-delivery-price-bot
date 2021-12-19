@@ -19,13 +19,12 @@ async def _get_price(message, address):
     coordinates = get_coordinates(address)
     results = await get_nearby_restaurants(coordinates)
     if not results:
-        await Message.answer(
+        return await Message.answer(
             message, i18n['poll_failure'].format(
                 address=address
             ),
             escape_text=False, bot=TelegramBot.bot
         )
-        return
     return await Message.answer(
         message, build_restaurants_str(results),
         bot=TelegramBot.bot
