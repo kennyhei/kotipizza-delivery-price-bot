@@ -19,8 +19,8 @@ i18n = {
         'help': (
             'Hei! Olen Kotipizza Botti. Pystyn kertomaan sinulle lähialueesi ravintoloiden kuljetushinnat.\n\n'
             'Voit ohjata minua seuraavilla komennoilla:\n\n'
-            '/start - Ilmoittaa 10 minuutin välein lähiravintoloiden kuljetushinnat\n' +
             '/notify - Ilmoittaa, kun lähiravintolan kuljetushinta on alle määritellyn maksimihinnan\n' +
+            '/poll - Ilmoittaa 10 minuutin välein lähiravintoloiden kuljetushinnat\n' +
             '/price - Ilmoittaa lähiravintoloiden viimeisimmät kuljetushinnat\n' +
             '/stop - Lopettaa kuljetushintojen haun\n'
         ),
@@ -43,8 +43,8 @@ i18n = {
         'help': (
             'Hi! I\'m Kotipizza Bot. I can tell you the delivery fees of your nearby restaurants.\n\n'
             'You can control me by sending these commands:\n\n'
-            '/start - Notifies every 10 minutes the current delivery price\n' +
             '/notify - Notifies when delivery price is below the given limit\n' +
+            '/poll - Notifies every 10 minutes the current delivery price\n' +
             '/price - Shows latest delivery price\n' +
             '/stop - Stops fetching delivery price'
         ),
