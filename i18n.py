@@ -17,7 +17,7 @@ i18n = {
         'poll_success': 'Viimeisin kuljetushinta on {price_str} €. Aika tilata! 🍕 https://kotipizza.fi',
         'help': (
             '/start - Ilmoittaa, kun kuljetushinta on alle määritellyn maksimihinnan\n' +
-            '/poll - Hakee 10 minuutin välein viimeisimmän kuljetushinnan\n' +
+            '/poll - Ilmoittaa 10 minuutin välein viimeisimmän kuljetushinnan\n' +
             '/price - Näyttää viimeisimmän kuljetushinnan\n' +
             '/stop - Lopettaa kuljetushinnan haun\n'
         )
@@ -37,7 +37,7 @@ i18n = {
         'poll_success': 'Current delivery price is {price_str} €. Time to order! 🍕 https://kotipizza.fi',
         'help': (
             '/start - Notifies when delivery price is below the given limit\n' +
-            '/poll - Fetches every 10 minutes the current delivery price\n' +
+            '/poll - Notifies every 10 minutes the current delivery price\n' +
             '/price - Shows latest delivery price\n' +
             '/stop - Stops fetching delivery price'
         )
