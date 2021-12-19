@@ -20,7 +20,8 @@ i18n = {
             '/poll - Ilmoittaa 10 minuutin välein lähiravintoloiden kuljetushinnat\n' +
             '/price - Ilmoittaa lähiravintoloiden viimeisimmät kuljetushinnat\n' +
             '/stop - Lopettaa kuljetushintojen haun\n'
-        )
+        ),
+        'restaurants_closed': 'Kaikki lähialueen ravintolat ovat suljettu. Kuljetushinnan haku lopetettu.'
     },
     'en': {
         'start': 'Hi there! What\'s the delivery address?',
@@ -32,7 +33,7 @@ i18n = {
         ),
         'latest_price_invalid': 'I haven\'t fetched latest price yet. Try again later.',
         'latest_price': 'Latest delivery price: {price} €',
-        'stop': 'Stopped fetching',
+        'stop': 'Stopped fetching.',
         'poll_failure': 'Could not find delivery price with given address *{address}*\\. Stopped fetching\\.',
         'poll_success': 'Current delivery price is {price} € ({estimate} min.). Time to order! 🍕 https://kotipizza.fi',
         'help': (
@@ -40,7 +41,8 @@ i18n = {
             '/poll - Notifies every 10 minutes the current delivery price\n' +
             '/price - Shows latest delivery price\n' +
             '/stop - Stops fetching delivery price'
-        )
+        ),
+        'restaurants_closed': 'All nearby restaurants are closed. Stopped fetching.'
     }
 }[settings.LANGUAGE]
 

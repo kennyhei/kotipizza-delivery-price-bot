@@ -37,11 +37,20 @@ async def _poll_price(message, data):
                 escape_text=False, bot=TelegramBot.bot
             )
             break
+        # Stop looping if all nearby restaurants are closed
+        if all(x['openForDeliveryStatus'] == 'CLOSED' for x in results):
+            await Message.answer(
+                message, i18n['restaurants_closed'],
+                bot=TelegramBot.bot
+            )
+            break
+        found_restaurant = False
         for restaurant in results:
             if (
                 restaurant['openForDeliveryStatus'] != 'CLOSED' and
                 restaurant['deliveryFee'] < max_price
             ):
+                found_restaurant = True
                 price = format_price(restaurant['deliveryFee'])
                 await Message.answer(
                     message, i18n['poll_success'].format(
@@ -50,6 +59,9 @@ async def _poll_price(message, data):
                     ),
                     bot=TelegramBot.bot
                 )
+                break
+        # Stop looping if we found restaurant with acceptable delivery fee
+        if found_restaurant:
             break
         # TODO: Put restaurants dict in memory (latest_restaurants_info or something like that)
         # await state.update_data(latest_price=price_str)
