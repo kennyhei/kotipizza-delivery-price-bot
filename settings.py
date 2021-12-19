@@ -7,7 +7,7 @@ load_dotenv()
 ENV = os.getenv('ENV', 'development')
 
 # Webserver settings
-WEBAPP_HOST = os.getenv('WEBAPP_HOST', 'localhost')
+WEBAPP_HOST = os.getenv('WEBAPP_HOST', 'localhost')  # TODO: Try with ips 0.0.0.0 or 127.0.0.1 in production
 WEBAPP_PORT = int(os.getenv('PORT', 5000))
 
 # Webhook settings
