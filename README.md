@@ -9,7 +9,7 @@ Steps:
 5. `source venv/bin/activate`
 6. `pip install -r requirements.txt`
 
-Run `python bot.py`
+Run `python main.py`
 
 ## Modes
 
