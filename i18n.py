@@ -16,10 +16,10 @@ i18n = {
         'poll_failure': 'En löytänyt kuljetushintaa osoitteelle *{address}*\\. Haku lopetettu\\.',
         'poll_success': 'Viimeisin kuljetushinta on {price_str} €. Aika tilata! 🍕 https://kotipizza.fi',
         'help': (
-            '/start - Ilmoittaa, kun kuljetushinta on alle määritellyn maksimihinnan\n' +
-            '/poll - Ilmoittaa 10 minuutin välein viimeisimmän kuljetushinnan\n' +
-            '/price - Ilmoittaa viimeisimmän kuljetushinnan\n' +
-            '/stop - Lopettaa kuljetushinnan haun\n'
+            '/start - Ilmoittaa, kun lähiravintolan kuljetushinta on alle määritellyn maksimihinnan\n' +
+            '/poll - Ilmoittaa 10 minuutin välein lähiravintoloiden kuljetushinnat\n' +
+            '/price - Ilmoittaa lähiravintoloiden viimeisimmät kuljetushinnat\n' +
+            '/stop - Lopettaa kuljetushintojen haun\n'
         )
     },
     'en': {

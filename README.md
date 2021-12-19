@@ -74,6 +74,3 @@ Content-Length: 240
     - NOTE: These are helpful only if user info is not cleared from memory after (any) command has been executed
 - Show prices of all nearby restaurants
 - Don't ask address again in `/start`, `/poll` etc. if it's found in the memory
-- Better texts
-- Don't use splinter, instead make GET request to Kotipizza's nearby restaurants API
-    - Use Google Maps geocoder for converting address to coordinates first (https://developers.google.com/maps/documentation/geocoding/overview?csw=1)

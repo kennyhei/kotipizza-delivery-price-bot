@@ -4,11 +4,11 @@ import i18n
 from aiogram.dispatcher.filters.state import State
 from aiogram.dispatcher.filters.state import StatesGroup
 
-from scraper import fetch_delivery_price
+from bot import TelegramBot
 from utils import Message
 from utils import is_float
-
-from bot import TelegramBot
+from utils import get_coordinates
+from utils import get_nearby_restaurants
 
 
 class StartForm(StatesGroup):
@@ -19,16 +19,16 @@ class StartForm(StatesGroup):
 async def _poll_price(message, data):
     address = data['address']
     max_price = data['max_price']
+    coordinates = get_coordinates(data['address'])
     state = None
     # Poll two hours at max
     for _ in range(12):
-        result = await asyncio.gather(fetch_delivery_price(address))
+        results = await get_nearby_restaurants(coordinates)
         state = TelegramBot.dp.current_state()
         data = await state.get_data()
         if not data['poll_price']:
             break
-        price = result[0]
-        if not price:
+        if not results:
             await Message.answer(
                 message, i18n['poll_failure'].format(
                     address=address
@@ -36,6 +36,9 @@ async def _poll_price(message, data):
                 escape_text=False, bot=TelegramBot.bot
             )
             break
+        # TODO: Multiple restaurants info, new text when
+        # some restaurant's delivery fee is below limit
+        price = results[0]['deliveryFee']
         price_str = format(price, '.2f')
         if price < max_price:
             await Message.answer(

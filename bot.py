@@ -1,3 +1,4 @@
+import aiohttp
 import logging
 import settings
 
@@ -14,18 +15,22 @@ class TelegramBot:
     bot = Bot(settings.TOKEN, parse_mode=ParseMode.MARKDOWN_V2)
     storage = MemoryStorage()
     dp = Dispatcher(bot, storage=storage)
+    # AIOHttp client session
+    session = None
 
 
 async def on_startup(dp):
     from cmds import setup_handlers
     if settings.ENV == 'production':
         await TelegramBot.bot.set_webhook(settings.WEBHOOK_URL)
+    TelegramBot.session = aiohttp.ClientSession(raise_for_status=True)
     setup_handlers(dp)
 
 
 async def on_shutdown(dp):
     # Remove webhook (not acceptable in some cases)
     await TelegramBot.bot.delete_webhook()
+    await TelegramBot.session.close()
 
 
 def main():

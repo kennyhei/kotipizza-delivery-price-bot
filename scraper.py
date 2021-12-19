@@ -2,6 +2,11 @@ import asyncio
 from splinter import Browser
 
 
+'''
+OBSOLETE, REPLACED BY api.py
+'''
+
+
 async def _fill_delivery_address(browser, address):
     """
     Phase 1:

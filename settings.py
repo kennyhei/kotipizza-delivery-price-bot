@@ -23,3 +23,9 @@ MODE = os.getenv('MODE', 'polling')
 
 # Bot language
 LANGUAGE = os.getenv('LANGUAGE', 'fi')
+
+# Geocoding API token
+GOOGLE_MAPS_TOKEN = os.getenv('GOOGLE_MAPS_TOKEN')
+
+# Restaurants API
+RESTAURANTS_API_URL = os.getenv('RESTAURANTS_API_URL')

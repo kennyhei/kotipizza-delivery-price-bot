@@ -1,3 +1,4 @@
 aiogram==2.17.1
+googlemaps==4.5.3
 python-dotenv==0.19.2
 splinter==0.16.0
