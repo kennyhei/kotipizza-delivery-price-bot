@@ -15,8 +15,8 @@ class Form(StatesGroup):
 
 async def _poll_price(message, address):
     state = None
-    # Poll two hours at max
-    for _ in range(20):
+    # Poll one hour at max
+    for _ in range(6):
         result = await asyncio.gather(fetch_delivery_price(address))
         state = TelegramBot.dp.current_state()
         data = await state.get_data()

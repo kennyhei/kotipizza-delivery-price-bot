@@ -21,7 +21,7 @@ async def _poll_price(message, data):
     max_price = data['max_price']
     state = None
     # Poll two hours at max
-    for _ in range(20):
+    for _ in range(12):
         result = await asyncio.gather(fetch_delivery_price(address))
         state = TelegramBot.dp.current_state()
         data = await state.get_data()
