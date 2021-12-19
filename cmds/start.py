@@ -16,6 +16,7 @@ class Form(StatesGroup):
 
 
 async def _poll_price(message, address):
+    asyncio.sleep(1)
     coordinates = get_coordinates(address)
     state = None
     # Poll two hours at max

@@ -18,6 +18,7 @@ class StartForm(StatesGroup):
 
 
 async def _poll_price(message, data):
+    asyncio.sleep(1)
     address = data['address']
     max_price = data['max_price']
     coordinates = get_coordinates(data['address'])
