@@ -3,7 +3,8 @@ import sys
 
 i18n = {
     'fi': {
-        'start': 'Hei siellä! Syötä katuosoitteesi ja kaupunkisi.',
+        'notify': 'Hei siellä! Syötä katuosoitteesi ja kaupunkisi.',
+        'start': 'Kiitos! Ilmoitan sinulle 10 minuutin välein lähiravintoloidesi kuljetushinnat.',
         'process_address': 'Kiitos! Syötä vielä ylin sallittu hinta kuljetukselle (esim. 5,9 tai 5.9).',
         'process_max_price_invalid': 'Hinnan täytyy olla luku. Yritä uudestaan.',
         'process_max_price': (
@@ -16,15 +17,16 @@ i18n = {
         'poll_failure': 'En löytänyt kuljetushintaa osoitteelle *{address}*\\. Haku lopetettu\\.',
         'poll_success': 'Viimeisin kuljetushinta on {price} € ({estimate} min.). Aika tilata! 🍕 https://kotipizza.fi',
         'help': (
-            '/start - Ilmoittaa, kun lähiravintolan kuljetushinta on alle määritellyn maksimihinnan\n' +
-            '/poll - Ilmoittaa 10 minuutin välein lähiravintoloiden kuljetushinnat\n' +
+            '/start - Ilmoittaa 10 minuutin välein lähiravintoloiden kuljetushinnat\n' +
+            '/notify - Ilmoittaa, kun lähiravintolan kuljetushinta on alle määritellyn maksimihinnan\n' +
             '/price - Ilmoittaa lähiravintoloiden viimeisimmät kuljetushinnat\n' +
             '/stop - Lopettaa kuljetushintojen haun\n'
         ),
         'restaurants_closed': 'Kaikki lähialueen ravintolat ovat suljettu. Kuljetushinnan haku lopetettu.'
     },
     'en': {
-        'start': 'Hi there! What\'s the delivery address?',
+        'notify': 'Hi there! What\'s the delivery address?',
+        'start': 'Thanks! I\'ll notify you every 10 minutes the delivery prices of your nearby restaurants.',
         'process_address': 'OK! What\'s the maximum limit for the price of delivery? (e.g. "5.1" or "5,1")',
         'process_max_price_invalid': 'Price has to be a number. Try again.',
         'process_max_price': (
@@ -37,8 +39,8 @@ i18n = {
         'poll_failure': 'Could not find delivery price with given address *{address}*\\. Stopped fetching\\.',
         'poll_success': 'Current delivery price is {price} € ({estimate} min.). Time to order! 🍕 https://kotipizza.fi',
         'help': (
-            '/start - Notifies when delivery price is below the given limit\n' +
-            '/poll - Notifies every 10 minutes the current delivery price\n' +
+            '/start - Notifies every 10 minutes the current delivery price\n' +
+            '/notify - Notifies when delivery price is below the given limit\n' +
             '/price - Shows latest delivery price\n' +
             '/stop - Stops fetching delivery price'
         ),

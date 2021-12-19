@@ -39,7 +39,7 @@ async def cmd_price(message):
         message.text = data['address']
         state = TelegramBot.dp.current_state()
         return await process_address(message, state)
-    return await Message.reply(message, i18n['start'])
+    return await Message.reply(message, i18n['notify'])
 
 
 # @dp.message_handler(state=Form.address)
