@@ -6,6 +6,7 @@ from aiogram.dispatcher.filters.state import StatesGroup
 
 from bot import TelegramBot
 from utils import Message
+from utils import delay
 from utils import format_price
 from utils import is_float
 from utils import get_coordinates
@@ -18,10 +19,10 @@ class StartForm(StatesGroup):
 
 
 async def _poll_price(message, data):
-    asyncio.sleep(1)
     address = data['address']
     max_price = data['max_price']
     coordinates = get_coordinates(data['address'])
+    await delay(1, message)
     state = None
     # Poll two hours at max
     for _ in range(12):

@@ -1,4 +1,5 @@
 import aiohttp
+import asyncio
 import googlemaps
 import settings
 
@@ -51,6 +52,12 @@ def build_restaurants_str(restaurants):
             text += f'({estimate} min.)'
             text += f'\n    - Kotiinkuljetus {price} €'
     return text
+
+
+async def delay(seconds, message):
+    await asyncio.sleep(seconds)
+    await Message.answer(message, '...')
+    await asyncio.sleep(seconds)
 
 
 def format_price(value):

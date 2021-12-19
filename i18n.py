@@ -14,7 +14,7 @@ i18n = {
         'latest_price_invalid': 'En ole vielä hakenut kuljetushintaa. Yritä hetken päästä uudestaan.',
         'latest_price': 'Viimeisin kuljetushinta: {price} €',
         'stop': 'Kuljetushinnan haku lopetettu.',
-        'poll_failure': 'En löytänyt kuljetushintaa osoitteelle *{address}*\\. Haku lopetettu\\.',
+        'poll_failure': 'En löytänyt kuljetushintoja osoitteelle *{address}*\\. Haku lopetettu\\.',
         'poll_success': 'Viimeisin kuljetushinta on {price} € ({estimate} min.). Aika tilata! 🍕 https://kotipizza.fi',
         'help': (
             '/start - Ilmoittaa 10 minuutin välein lähiravintoloiden kuljetushinnat\n' +
