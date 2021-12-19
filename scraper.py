@@ -3,7 +3,7 @@ from splinter import Browser
 
 
 '''
-OBSOLETE, REPLACED BY api.py
+OBSOLETE, REPLACED BY get_coordinates and get_nearby_restaurants in utils.py
 '''
 
 

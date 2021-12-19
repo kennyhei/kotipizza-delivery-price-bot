@@ -73,3 +73,4 @@ Content-Length: 240
     - `/config` - Show set address and max price
     - NOTE: These are helpful only if user info is not cleared from memory after (any) command has been executed
 - Don't ask address again in `/start`, `/poll` etc. if it's found in the memory
+- Poll right after price is updated (e.g. 15:00, 15:10, 15:20, 15:30...), no matter when user typed command 
