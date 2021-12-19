@@ -18,7 +18,7 @@ i18n = {
         'help': (
             '/start - Ilmoittaa, kun kuljetushinta on alle määritellyn maksimihinnan\n' +
             '/poll - Ilmoittaa 10 minuutin välein viimeisimmän kuljetushinnan\n' +
-            '/price - Näyttää viimeisimmän kuljetushinnan\n' +
+            '/price - Ilmoittaa viimeisimmän kuljetushinnan\n' +
             '/stop - Lopettaa kuljetushinnan haun\n'
         )
     },
