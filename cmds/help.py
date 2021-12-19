@@ -9,4 +9,4 @@ async def cmd_help(message):
 
 
 def setup_help(dp):
-    dp.register_message_handler(cmd_help, commands=['help'])
+    dp.register_message_handler(cmd_help, commands=['start', 'help'])

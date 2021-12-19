@@ -45,8 +45,8 @@ async def _poll_price(message, address):
     await state.reset_state()
 
 
-# @dp.message_handler(commands=['start'])
-async def cmd_start(message):
+# @dp.message_handler(commands=['poll'])
+async def cmd_poll(message):
     await Form.address.set()
     return await Message.reply(message, i18n['notify'])
 
@@ -61,10 +61,10 @@ async def process_address(message, state):
     async with state.proxy() as data:
         asyncio.create_task(_poll_price(message, data['address']))
         return await Message.answer(
-            message, i18n['start']
+            message, i18n['poll']
         )
 
 
-def setup_start(dp):
-    dp.register_message_handler(cmd_start, commands=['start'])
+def setup_poll(dp):
+    dp.register_message_handler(cmd_poll, commands=['poll'])
     dp.register_message_handler(process_address, state=Form.address)
