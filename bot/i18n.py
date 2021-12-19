@@ -19,10 +19,11 @@ i18n = {
         'help': (
             'Hei! Olen Kotipizza Botti. Pystyn kertomaan sinulle lähialueesi ravintoloiden kuljetushinnat.\n\n'
             'Voit ohjata minua seuraavilla komennoilla:\n\n'
-            '/notify - Ilmoittaa, kun lähiravintolan kuljetushinta on alle määritellyn maksimihinnan\n' +
-            '/poll - Ilmoittaa 10 minuutin välein lähiravintoloiden kuljetushinnat\n' +
-            '/price - Ilmoittaa lähiravintoloiden viimeisimmät kuljetushinnat\n' +
-            '/stop - Lopettaa kuljetushintojen haun\n'
+            '/notify - Ilmoitan, kun lähiravintolan kuljetushinta on alle määritellyn maksimihinnan\n' +
+            '/poll - Ilmoitan 10 minuutin välein lähiravintoloiden kuljetushinnat\n' +
+            '/price - Ilmoitan lähiravintoloiden viimeisimmät kuljetushinnat\n' +
+            '/stop - Lopetan kuljetushintojen haun\n' +
+            '/help - Näytän sinulle nämä käyttöohjeet'
         ),
         'restaurants_closed': 'Kaikki lähialueen ravintolat ovat suljettu. Kuljetushinnan haku lopetettu.'
     },
@@ -46,7 +47,8 @@ i18n = {
             '/notify - Notifies when delivery price is below the given limit\n' +
             '/poll - Notifies every 10 minutes the current delivery price\n' +
             '/price - Shows latest delivery price\n' +
-            '/stop - Stops fetching delivery price'
+            '/stop - Stops fetching delivery price' +
+            '/help - I\'ll show you this instruction manual'
         ),
         'restaurants_closed': 'All nearby restaurants are closed. Stopped fetching.'
     }
