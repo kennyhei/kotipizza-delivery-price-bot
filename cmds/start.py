@@ -6,6 +6,7 @@ from aiogram.dispatcher.filters.state import StatesGroup
 
 from bot import TelegramBot
 from utils import Message
+from utils import format_price
 from utils import is_float
 from utils import get_coordinates
 from utils import get_nearby_restaurants
@@ -41,17 +42,17 @@ async def _poll_price(message, data):
                 restaurant['openForDeliveryStatus'] != 'CLOSED' and
                 restaurant['deliveryFee'] < max_price
             ):
-                price = restaurant['deliveryFee']
-                price_str = format(price, '.2f')
+                price = format_price(restaurant['deliveryFee'])
                 await Message.answer(
                     message, i18n['poll_success'].format(
-                        price_str=price_str,
+                        price=price,
                         estimate=restaurant['currentDeliveryEstimate']
                     ),
                     bot=TelegramBot.bot
                 )
             break
-        await state.update_data(latest_price=price_str)
+        # TODO: Put restaurants dict in memory (latest_restaurants_info or something like that)
+        # await state.update_data(latest_price=price_str)
         await asyncio.sleep(60 * 10)
     await state.reset_state()
 
@@ -85,10 +86,10 @@ async def process_max_price(message, state):
     await StartForm.next()
     async with state.proxy() as data:
         asyncio.create_task(_poll_price(message, data))
-        price_str = str(data['max_price']).replace('.', '\\.')
+        price = format_price(data['max_price'])
         return await Message.answer(
             message, i18n['process_max_price'].format(
-                price_str=price_str,
+                price=price,
                 address=data['address']
             ),
             escape_text=False
