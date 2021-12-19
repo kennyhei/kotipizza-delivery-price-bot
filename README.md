@@ -68,10 +68,6 @@ Content-Length: 240
 ## TODO
 
 - Redesign commands:
-    - /start
-    - /poll - Notify user every 10 minutes what's the current price
-    - /showlatestprice -> rename /price - Show current price, ask for address if not given already
-    - /help
-    - /stop
     - /setaddress(?) - User can set address so that bot doesn't need to ask it again in /start, /poll and /price commands
 - Show prices of all nearby restaurants
+- Don't ask address again in /start, /poll if it's found in the memory
