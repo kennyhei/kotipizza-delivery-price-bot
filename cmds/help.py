@@ -1,6 +1,6 @@
-import i18n
+import bot.i18n as i18n
 
-from utils import Message
+from lib.utils import Message
 
 
 # @dp.message_handler(commands=['stop'])

@@ -1,16 +1,16 @@
 import asyncio
-import i18n
+import bot.i18n as i18n
 
 from aiogram.dispatcher.filters.state import State
 from aiogram.dispatcher.filters.state import StatesGroup
 
 from bot import TelegramBot
-from utils import Message
-from utils import delay
-from utils import format_price
-from utils import is_float
-from utils import get_coordinates
-from utils import get_nearby_restaurants
+from lib.utils import Message
+from lib.utils import delay
+from lib.utils import format_price
+from lib.utils import is_float
+from lib.api import get_coordinates
+from lib.api import get_nearby_restaurants
 
 
 class StartForm(StatesGroup):
