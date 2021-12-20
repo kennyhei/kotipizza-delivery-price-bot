@@ -4,7 +4,7 @@ import sys
 i18n = {
     'fi': {
         'notify': 'Hei siellä! Syötä katuosoitteesi ja kaupunkisi.',
-        'poll': 'Kiitos! Ilmoitan sinulle 10 minuutin välein lähiravintoloidesi kuljetushinnat.',
+        'poll': 'Kiitos! Ilmoitan sinulle 10 minuutin välein lähiravintoloidesi dynaamiset kuljetushinnat.',
         'process_address': 'Kiitos! Syötä vielä ylin sallittu hinta kuljetukselle (esim. 5,9 tai 5.9).',
         'process_max_price_invalid': 'Hinnan täytyy olla luku. Yritä uudestaan.',
         'process_max_price': (
@@ -17,7 +17,7 @@ i18n = {
         'poll_failure': 'En löytänyt kuljetushintoja osoitteelle *{address}*\\. Haku lopetettu\\.',
         'poll_success': 'Viimeisin kuljetushinta on {price} € ({estimate} min.). Aika tilata! 🍕 https://kotipizza.fi',
         'help': (
-            'Hei! Olen Kotipizza Botti. Pystyn kertomaan sinulle lähialueesi ravintoloiden kuljetushinnat.\n\n'
+            'Hei! Olen Kotipizza Botti. Pystyn kertomaan sinulle lähialueesi ravintoloiden dynaamiset kuljetushinnat.\n\n'
             'Voit ohjata minua seuraavilla komennoilla:\n\n'
             '/notify - Ilmoitan, kun lähiravintolan kuljetushinta on alle määrittelemäsi maksimihinnan\n' +
             '/poll - Ilmoitan 10 minuutin välein lähiravintoloiden kuljetushinnat\n' +
@@ -25,11 +25,11 @@ i18n = {
             '/stop - Lopetan kuljetushintojen haun\n' +
             '/help - Näytän sinulle nämä käyttöohjeet'
         ),
-        'restaurants_closed': 'Kaikki lähialueen ravintolat ovat suljettu. Kuljetushinnan haku lopetettu.'
+        'restaurants_closed': 'Kaikki lähialueen ravintolat ovat suljettu. Kuljetushintojen haku lopetettu.'
     },
     'en': {
         'notify': 'Hi there! What\'s the delivery address?',
-        'poll': 'Thanks! I\'ll notify you every 10 minutes the delivery prices of your nearby restaurants.',
+        'poll': 'Thanks! I\'ll notify you every 10 minutes the dynamic delivery prices of your nearby restaurants.',
         'process_address': 'OK! What\'s the maximum limit for the price of delivery? (e.g. "5.1" or "5,1")',
         'process_max_price_invalid': 'Price has to be a number. Try again.',
         'process_max_price': (
@@ -42,7 +42,7 @@ i18n = {
         'poll_failure': 'Could not find delivery price with given address *{address}*\\. Stopped fetching\\.',
         'poll_success': 'Current delivery price is {price} € ({estimate} min.). Time to order! 🍕 https://kotipizza.fi',
         'help': (
-            'Hi! I\'m Kotipizza Bot. I can tell you the delivery fees of your nearby restaurants.\n\n'
+            'Hi! I\'m Kotipizza Bot. I can tell you the dynamic delivery fees of your nearby restaurants.\n\n'
             'You can control me by sending these commands:\n\n'
             '/notify - Notifies when delivery price is below the given limit\n' +
             '/poll - Notifies every 10 minutes the current delivery price\n' +
