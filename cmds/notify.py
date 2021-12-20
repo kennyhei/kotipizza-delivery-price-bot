@@ -48,12 +48,13 @@ async def _poll_price(message, data):
             break
         found_restaurant = False
         for restaurant in results:
+            price = restaurant.get('dynamicDeliveryFee', restaurant['deliveryFee'])
             if (
                 restaurant['openForDeliveryStatus'] != 'CLOSED' and
-                restaurant['deliveryFee'] < max_price
+                price < max_price
             ):
                 found_restaurant = True
-                price = format_price(restaurant['deliveryFee'])
+                price = format_price(price)
                 await Message.answer(
                     message, i18n['poll_success'].format(
                         price=price,

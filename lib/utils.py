@@ -34,7 +34,9 @@ def build_restaurants_str(restaurants):
     text = 'Ravintolat:\n'
     for idx, restaurant in enumerate(restaurants):
         name = restaurant['displayName']
-        price = format_price(restaurant['deliveryFee'])
+        price = format_price(
+            restaurant.get('dynamicDeliveryFee', restaurant['deliveryFee'])
+        )
         estimate = restaurant['currentDeliveryEstimate']
         is_closed = restaurant['openForDeliveryStatus'] == 'CLOSED'
         text += f'\n{idx + 1}. {name}'
