@@ -19,7 +19,7 @@ i18n = {
         'help': (
             'Hei! Olen Kotipizza Botti. Pystyn kertomaan sinulle lähialueesi ravintoloiden kuljetushinnat.\n\n'
             'Voit ohjata minua seuraavilla komennoilla:\n\n'
-            '/notify - Ilmoitan, kun lähiravintolan kuljetushinta on alle määritellyn maksimihinnan\n' +
+            '/notify - Ilmoitan, kun lähiravintolan kuljetushinta on alle määrittelemäsi maksimihinnan\n' +
             '/poll - Ilmoitan 10 minuutin välein lähiravintoloiden kuljetushinnat\n' +
             '/price - Ilmoitan lähiravintoloiden viimeisimmät kuljetushinnat\n' +
             '/stop - Lopetan kuljetushintojen haun\n' +

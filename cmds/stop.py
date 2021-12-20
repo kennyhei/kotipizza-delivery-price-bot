@@ -1,6 +1,6 @@
 import bot.i18n as i18n
 
-from bot import TelegramBot
+from bot.bot import TelegramBot
 from lib.utils import Message
 
 

@@ -41,7 +41,7 @@ def build_restaurants_str(restaurants):
         if is_closed:
             text += f'\n    - SULJETTU'
         else:
-            text += f'({estimate} min.)'
+            text += f' ({estimate} min.)'
             text += f'\n    - Kotiinkuljetus {price} €'
     return text
 

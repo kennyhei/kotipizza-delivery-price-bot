@@ -4,7 +4,7 @@ import bot.i18n as i18n
 from aiogram.dispatcher.filters.state import State
 from aiogram.dispatcher.filters.state import StatesGroup
 
-from bot import TelegramBot
+from bot.bot import TelegramBot
 from lib.utils import Message
 from lib.utils import build_restaurants_str
 from lib.api import get_coordinates

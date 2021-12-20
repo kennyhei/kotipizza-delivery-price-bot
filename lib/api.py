@@ -2,7 +2,7 @@ import aiohttp
 import googlemaps
 import settings
 
-from bot import TelegramBot
+from bot.bot import TelegramBot
 
 
 # https://developers.google.com/maps/documentation/geocoding/overview
