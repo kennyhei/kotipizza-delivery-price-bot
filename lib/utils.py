@@ -38,10 +38,13 @@ def build_restaurants_str(restaurants):
             restaurant.get('dynamicDeliveryFee', restaurant['deliveryFee'])
         )
         estimate = restaurant['currentDeliveryEstimate']
-        is_closed = restaurant['openForDeliveryStatus'] == 'CLOSED'
+        delivery_status = restaurant['openForDeliveryStatus']
         text += f'\n{idx + 1}. {name}'
-        if is_closed:
-            text += f'\n    - SULJETTU'
+        if delivery_status in ['CLOSED', 'TEMPORARILY_UNAVAILABLE']:
+            text += {
+                'CLOSED': f'\n    - SULJETTU',
+                'TEMPORARILY_UNAVAILABLE': f'\n    - VÄLIAIKAISESTI SULJETTU'
+            }.get(delivery_status, '')
         else:
             text += f' ({estimate} min.)'
             text += f'\n    - Kotiinkuljetus {price} €'

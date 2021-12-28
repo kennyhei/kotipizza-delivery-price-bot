@@ -40,7 +40,7 @@ async def _poll_price(message, data):
             )
             break
         # Stop looping if all nearby restaurants are closed
-        if all(x['openForDeliveryStatus'] == 'CLOSED' for x in results):
+        if all(x['openForDeliveryStatus'] in ['CLOSED', 'TEMPORARILY_UNAVAILABLE'] for x in results):
             await Message.answer(
                 message, i18n['restaurants_closed'],
                 bot=TelegramBot.bot
