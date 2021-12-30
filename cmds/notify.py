@@ -6,23 +6,20 @@ from aiogram.dispatcher.filters.state import StatesGroup
 
 from bot.bot import TelegramBot
 from lib.utils import Message
-from lib.utils import delay
 from lib.utils import format_price
 from lib.utils import is_float
-from lib.api import get_coordinates
 from lib.api import get_nearby_restaurants
 
 
 class StartForm(StatesGroup):
-    address = State()
     max_price = State()
 
 
 async def _poll_price(message, data):
     address = data['address']
     max_price = data['max_price']
-    coordinates = get_coordinates(data['address'])
-    await delay(1, message)
+    coordinates = data['coordinates']
+    await Message.delay(message, 1)
     state = None
     # Poll two hours at max
     for _ in range(12):
@@ -66,37 +63,26 @@ async def _poll_price(message, data):
         # Stop looping if we found restaurant with acceptable delivery fee
         if found_restaurant:
             break
-        # TODO: Put restaurants dict in memory (latest_restaurants_info or something like that)
-        # await state.update_data(latest_price=price_str)
         await asyncio.sleep(60 * 10)
-    await state.reset_state()
+    await state.update_data(poll_price=False)
 
 
-# @dp.message_handler(commands=['notify'])
 async def cmd_notify(message):
-    await StartForm.address.set()
-    return await Message.reply(message, i18n['notify'])
+    data = await TelegramBot.dp.current_state().get_data()
+    if not data.get('address') or not data.get('coordinates'):
+        return await Message.reply(message, i18n['address_missing'])
+    await StartForm.max_price.set()
+    return await Message.reply(message, i18n['set_max_price'])
 
 
-# @dp.message_handler(state=Form.address)
-async def process_notify_address(message, state):
-    await state.update_data(address=message.text)
-    await StartForm.next()
-    return await Message.reply(message, i18n['process_address'])
-
-
-# @dp.message_handler(lambda message: not is_float(message.text), state=Form.max_price)
 async def process_max_price_invalid(message):
     return await Message.reply(message, i18n['process_max_price_invalid'])
 
 
-# @dp.message_handler(lambda message: is_float(message.text), state=Form.max_price)
 async def process_max_price(message, state):
     await state.update_data(
         max_price=float(message.text.replace(',', '.')),
-        poll_interval=60 * 10,  # seconds
-        poll_price=True,
-        latest_price=None
+        poll_price=True
     )
     await StartForm.next()
     async with state.proxy() as data:
@@ -113,7 +99,6 @@ async def process_max_price(message, state):
 
 def setup_notify(dp):
     dp.register_message_handler(cmd_notify, commands=['notify'])
-    dp.register_message_handler(process_notify_address, state=StartForm.address)
     dp.register_message_handler(
         process_max_price_invalid,
         lambda message: not is_float(message.text),

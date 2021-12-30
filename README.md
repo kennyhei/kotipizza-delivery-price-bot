@@ -67,11 +67,6 @@ Content-Length: 240
 
 ## TODO
 
-- New command(s):
-    - `/setaddress` - User can set address so that bot doesn't need to ask it again in /start, /poll and /price commands
-    - `/setprice` - User can set maximum price for the delivery
-    - `/config` - Show set address and max price
-    - NOTE: These are helpful only if user info is not cleared from memory after (any) command has been executed
-- Don't ask address again in `/start`, `/poll` etc. if it's found in the memory
+- Switch MemoryStorage to RedisStorage
 - Poll right after price is updated (e.g. 15:00, 15:10, 15:20, 15:30...), no matter when user typed command
 - Use aiogram's i18n feature

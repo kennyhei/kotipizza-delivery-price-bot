@@ -29,9 +29,16 @@ class Message:
                 return await bot.send_message(message.chat.id, value, reply_to_message_id=message.id)
             return SendMessage(message.chat.id, value, reply_to_message_id=message.id)
 
+    @staticmethod
+    async def delay(message, seconds):
+        await asyncio.sleep(seconds)
+        await Message.answer(message, '...')
+        await asyncio.sleep(seconds)
 
-def build_restaurants_str(restaurants):
-    text = 'Ravintolat:\n'
+
+def build_restaurants_str(address, restaurants):
+    text = f'Kuljetusosoite:\n{address}\n\n'
+    text += 'Ravintolat:\n'
     for idx, restaurant in enumerate(restaurants):
         name = restaurant['displayName']
         price = format_price(
@@ -49,12 +56,6 @@ def build_restaurants_str(restaurants):
             text += f' ({estimate} min.)'
             text += f'\n    - Kotiinkuljetus {price} €'
     return text
-
-
-async def delay(seconds, message):
-    await asyncio.sleep(seconds)
-    await Message.answer(message, '...')
-    await asyncio.sleep(seconds)
 
 
 def format_price(value):

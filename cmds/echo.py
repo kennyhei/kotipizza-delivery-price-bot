@@ -1,6 +1,5 @@
 
 
-# @dp.message_handler(commands=['stop'])
 async def cmd_echo(message):
     print(message)
 
