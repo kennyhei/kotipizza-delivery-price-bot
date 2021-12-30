@@ -70,3 +70,7 @@ Content-Length: 240
 - Switch MemoryStorage to RedisStorage
 - Poll right after price is updated (e.g. 15:00, 15:10, 15:20, 15:30...), no matter when user typed command
 - Use aiogram's i18n feature
+- Option to give delivery address separately in commands `/poll`, `/price`, `/notify`
+    - `/clearaddress`
+- Divide commands in sections in `/help` as there are more and more commands
+- Minimize `get_coordinates` calls in `/setaddress` and `/start`
